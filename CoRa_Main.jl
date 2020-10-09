@@ -151,11 +151,11 @@ elseif(iARG.an=="OptDY")
 			println("RUN #",ruN)
 			uns = 0;
 			p = copy(pO);
-			####### Uncomment for random initial conditions: #######
+			####### Uncomment the next three lines for random initial conditions: #######
 			#for i in 1:length(mrw.pOp)
 			#	p[mrw.pOp[i]] = 10 .^ (rand(Uniform(mrw.pMin[i], mrw.pMax[i])));
 			#end
-			########################################################
+			#############################################################################
 			## Temperature function for simulated annealing:
 			if(mrw.temp==1)
 				mrwT = collect(mrw.iter:-1:1) ./ mrw.iter;
