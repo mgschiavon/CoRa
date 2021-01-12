@@ -16,10 +16,10 @@ module mm
 	end g kX kY kZ oY n mYs gYs;
 	# ODE system without feedback
 	odeNF = @ode_def begin
-		dY = (2 * X *                kY/(kY + kX + (kZ * ((Ys/oY)^n)))) - (g * Y)
-		dX = (2 * X *                kX/(kY + kX + (kZ * ((Ys/oY)^n)))) - X
-		dZ = (2 * X * (kZ * ((Y/oY)^n))/(kY + kX + (kZ * ((Ys/oY)^n)))) - (g * Z)
-		dYs = mYs - (gYs * Y)
+		dY = (2 * X *                 kY/(kY + kX + (kZ * ((Ys/oY)^n)))) - (g * Y)
+		dX = (2 * X *                 kX/(kY + kX + (kZ * ((Ys/oY)^n)))) - X
+		dZ = (2 * X * (kZ * ((Ys/oY)^n))/(kY + kX + (kZ * ((Ys/oY)^n)))) - (g * Z)
+		dYs = mYs - (gYs * Ys)
 	end g kX kY kZ oY n mYs gYs;
 
 	# Define system's output (e.g. total Y):
