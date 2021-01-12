@@ -13,7 +13,7 @@ module mm
 		dY = (2 * X *                kY/(kY + kX + (kZ * ((Y/oY)^n)))) - (g * Y)
 		dX = (2 * X *                kX/(kY + kX + (kZ * ((Y/oY)^n)))) - X
 		dZ = (2 * X * (kZ * ((Y/oY)^n))/(kY + kX + (kZ * ((Y/oY)^n)))) - (g * Z)
-	end g kX kY kZ oY n mYs gYs;
+	end g kX kY kZ oY n n mYs gYs;
 	# ODE system without feedback
 	odeNF = @ode_def begin
 		dY = (2 * X *                kY/(kY + kX + (kZ * ((Ys/oY)^n)))) - (g * Y)
