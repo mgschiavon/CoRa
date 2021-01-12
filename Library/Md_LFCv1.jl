@@ -32,7 +32,7 @@ module mm
 
 	# Define locally analogous system:
 	function localNF(p,ss)
-		p[:mYs] = (2 * ss[2] * p[:kY]/(p[:kY] + p[:kX] + (p[:kZ] * ((ss[1]/p[:oY])^p[:n]))));
+		p[:mYs] = (2 * ss[2] * kY/(kY + kX + (kZ * ((ss[1]/oY)^n))));
 		p[:gYs] = p[:g];
 	end;
 end

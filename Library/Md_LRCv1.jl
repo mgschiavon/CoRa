@@ -10,7 +10,7 @@ module mm
 
 	# ODE system
 	odeFB = @ode_def begin
-		dY = (2 * X * (kY * ((Y/oY)^n))/(kZ *  + kX + (kY * ((Y/oY)^n)))) - (g * Y)
+		dY = (2 * X * (kY * ((Y/oY)^n))/((kZ *  + kX + (kY * ((Y/oY)^n)))) - (g * Y)
 		dX = (2 * X *                kX/(kZ + kX + (kY * ((Y/oY)^n)))) - X
 		dZ = (2 * X *                kZ/(kZ + kX + (kY * ((Y/oY)^n)))) - (g * Z)
 	end g kX kY kZ oY n mYs gYs;
@@ -32,7 +32,7 @@ module mm
 
 	# Define locally analogous system:
 	function localNF(p,ss)
-		p[:mYs] = (2 * ss[2] * (p[:kY] * ((ss[1]/p[:oY])^p[:n]))/(p[:kZ] + p[:kX] + (p[:kY] * ((ss[1]/p[:oY])^p[:n]))));
+		p[:mYs] = (2 * ss[2] * (kY * ((ss[1]/oY)^n))/(kZ + kX + (kY * ((ss[1]/oY)^n))));
 		p[:gYs] = p[:g];
 	end;
 end
