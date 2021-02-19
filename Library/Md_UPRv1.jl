@@ -20,7 +20,7 @@ module mm
 		dIa  = - (gI * Ia) + (cA * (U + Ud + UdB) * I) - (gIA * ((kI ^ nI)/((kI ^ nI) + (Ia ^ nI))) * Ia)
 		dHu  = bHu - (gHs * Hu) - (bHs * min(Ia,Hu))
 		dHs  = - (gHs * Hs) + (bHs * min(Ia,Hu))
-		dB   = (bB * (1 + (nB * (Hs ^ 2)/(a0 + (a1 * Hs) + (Hs ^ 2))))) - (gB * B) - (cB * U * B) + (gUB * UB) - (cB * Ud * B) + (gUB * UdB) + (gF * UB)
+		dB   = (bB * (1 + (nB * (Hs ^ 2)/(a0 + (a1 * Hs) + (Hs ^ 2))))) - (gB * B) - (cB * U * B) + (gUB * UB) - (cB * Ud * B) + (gUB * UdB) + (gF * UB) + (gI * IB)
 		dE   = (bE * (1 + (nE * (Hs ^ 2)/(a0 + (a1 * Hs) + (Hs ^ 2))))) - (gE * E)
 	end sU cB gUB cD cE gB gF mI gI cA gIB gIA kI nI bHu gHs bHs bB nB a0 a1 gB bE nE gE uT;
 	# ODE system without feedback
@@ -34,7 +34,7 @@ module mm
 		dIa  = - (gI * Ia) + (cA * uT * I) - (gIA * ((kI ^ nI)/((kI ^ nI) + (Ia ^ nI))) * Ia)
 		dHu  = bHu - (gHs * Hu) - (bHs * min(Ia,Hu))
 		dHs  = - (gHs * Hs) + (bHs * min(Ia,Hu))
-		dB   = (bB * (1 + (nB * (Hs ^ 2)/(a0 + (a1 * Hs) + (Hs ^ 2))))) - (gB * B) - (cB * U * B) + (gUB * UB) - (cB * Ud * B) + (gUB * UdB) + (gF * UB)
+		dB   = (bB * (1 + (nB * (Hs ^ 2)/(a0 + (a1 * Hs) + (Hs ^ 2))))) - (gB * B) - (cB * U * B) + (gUB * UB) - (cB * Ud * B) + (gUB * UdB) + (gF * UB) + (gI * IB)
 		dE   = (bE * (1 + (nE * (Hs ^ 2)/(a0 + (a1 * Hs) + (Hs ^ 2))))) - (gE * E)
 	end sU cB gUB cD cE gB gF mI gI cA gIB gIA kI nI bHu gHs bHs bB nB a0 a1 gB bE nE gE uT;
 
