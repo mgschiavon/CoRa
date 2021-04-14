@@ -16,8 +16,8 @@ module mm
 		dUB  = (cB * U * B) - (gUB * UB) - (cD * UB) + (cE * E * UdB) - (gB * UB) - (gF * UB)
 		dUd  = - (cB * Ud * B) + (gUB * UdB) + (cD * U) - (cE * E * Ud) + (gB * UdB)
 		dUdB = (cB * Ud * B) - (gUB * UdB) + (cD * UB) - (cE * E * UdB) - (gB * UdB)
-		dI   = mI - (gI * I) - (cB * B * I) - (cA * (U + Ud + UdB) * I) + (gIB * IB) + (gIA * ((kI ^ nI)/((kI ^ nI) + (Ia ^ nI))) * Ia)
-		dIB  = - (gI * IB) + (cB * B * I) - (gIB * IB)
+		dI   = mI - (gI * I) - (cBI * B * I) - (cA * (U + Ud + UdB) * I) + (gIB * IB) + (gIA * ((kI ^ nI)/((kI ^ nI) + (Ia ^ nI))) * Ia)
+		dIB  = - (gI * IB) + (cBI * B * I) - (gIB * IB)
 		dIa  = - (gI * Ia) + (cA * (U + Ud + UdB) * I) - (gIA * ((kI ^ nI)/((kI ^ nI) + (Ia ^ nI))) * Ia)
 		dHu  = bHu - (gHs * Hu) - (bHs * min(Ia,Hu))
 		dHs  = - (gHs * Hs) + (bHs * min(Ia,Hu))
@@ -27,15 +27,15 @@ module mm
 		dE   = (bE * Em) - (gE * E)
 		dRm  = - (gHs * Rm) + (bHs * min(Ia,Hu))
 		dRs  = (0.00833 * Rm) - (0.0000347 * Rs)
-	end sU cB gUB cD cE gB gF mI gI cA gIB gIA kI nI bHu gHs bHs bBm nB a0 a1 gBm bB gB bEm nE gEm bE gE uT;
+	end sU cB cBI gUB cD cE gB gF mI gI cA gIB gIA kI nI bHu gHs bHs bBm nB a0 a1 gBm bB gB bEm nE gEm bE gE uT;
 	# ODE system without feedback
 	odeNF = @ode_def begin
 		dU   = sU - (cB * U * B) + (gUB * UB) - (cD * U) + (cE * E * Ud) + (gB * UB)
 		dUB  = (cB * U * B) - (gUB * UB) - (cD * UB) + (cE * E * UdB) - (gB * UB) - (gF * UB)
 		dUd  = - (cB * Ud * B) + (gUB * UdB) + (cD * U) - (cE * E * Ud) + (gB * UdB)
 		dUdB = (cB * Ud * B) - (gUB * UdB) + (cD * UB) - (cE * E * UdB) - (gB * UdB)
-		dI   = mI - (gI * I) - (cB * B * I) - (cA * uT * I) + (gIB * IB) + (gIA * ((kI ^ nI)/((kI ^ nI) + (Ia ^ nI))) * Ia)
-		dIB  = - (gI * IB) + (cB * B * I) - (gIB * IB)
+		dI   = mI - (gI * I) - (cBI * B * I) - (cA * uT * I) + (gIB * IB) + (gIA * ((kI ^ nI)/((kI ^ nI) + (Ia ^ nI))) * Ia)
+		dIB  = - (gI * IB) + (cBI * B * I) - (gIB * IB)
 		dIa  = - (gI * Ia) + (cA * uT * I) - (gIA * ((kI ^ nI)/((kI ^ nI) + (Ia ^ nI))) * Ia)
 		dHu  = bHu - (gHs * Hu) - (bHs * min(Ia,Hu))
 		dHs  = - (gHs * Hs) + (bHs * min(Ia,Hu))
@@ -45,7 +45,7 @@ module mm
 		dE   = (bE * Em) - (gE * E)
 		dRm  = - (gHs * Rm) + (bHs * min(Ia,Hu))
 		dRs  = (0.00833 * Rm) - (0.0000347 * Rs)
-	end sU cB gUB cD cE gB gF mI gI cA gIB gIA kI nI bHu gHs bHs bBm nB a0 a1 gBm bB gB bEm nE gEm bE gE uT;
+	end sU cB CBI gUB cD cE gB gF mI gI cA gIB gIA kI nI bHu gHs bHs bBm nB a0 a1 gBm bB gB bEm nE gEm bE gE uT;
 
 	# Define system's output (total Y):
 	function outFB(ss)
