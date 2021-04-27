@@ -6,7 +6,7 @@ using Plots
 
 cd("C:\\Users\\mgsch\\Dropbox (MGS-UCSF)\\MODEL - Quantifying feedback\\Paper\\CoRa\\")
 iARG = (mm = "UPRv5",  # Label for motif file
-     ex = "mutI",      # Label for parameters file
+     ex = "Ex01",      # Label for parameters file
      pp = :cD,         # Label for perturbation type
      ax = :cD,         # Label for condition/environment
      an = "ExSSs");    # Chose analysis type (Options: ExSSs, ExDyn, DYms, OptDY)
