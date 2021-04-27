@@ -57,7 +57,7 @@ x = zeros(length(ss.u));
 for i in 1:length(ss.u)
     x[i] = ss.u[i][iS];
 end
-plot(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),lw=3,legend=:topleft)
+plot(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," mM"),lw=3,legend=:topleft)
 
 p[:cD] = 9710.475*0.66/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
@@ -74,7 +74,7 @@ x = zeros(length(ss.u));
 for i in 1:length(ss.u)
     x[i] = ss.u[i][iS];
 end
-plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),lw=3)
+plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," mM"),lw=3)
 
 p[:cD] = 9710.475*1/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
@@ -91,7 +91,7 @@ x = zeros(length(ss.u));
 for i in 1:length(ss.u)
     x[i] = ss.u[i][iS];
 end
-plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),lw=3)
+plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," mM"),lw=3)
 
 p[:cD] = 9710.475*1.5/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
@@ -108,7 +108,7 @@ x = zeros(length(ss.u));
 for i in 1:length(ss.u)
     x[i] = ss.u[i][iS];
 end
-plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),lw=3)
+plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," mM"),lw=3)
 
 p[:cD] = 9710.475*2.2/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
@@ -125,7 +125,7 @@ x = zeros(length(ss.u));
 for i in 1:length(ss.u)
     x[i] = ss.u[i][iS];
 end
-plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),lw=3)
+plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," mM"),lw=3)
 
 p[:cD] = 9710.475*3.3/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
@@ -142,7 +142,7 @@ x = zeros(length(ss.u));
 for i in 1:length(ss.u)
     x[i] = ss.u[i][iS];
 end
-plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),lw=3)
+plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," mM"),lw=3)
 
 p[:cD] = 9710.475;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
@@ -159,7 +159,7 @@ x = zeros(length(ss.u));
 for i in 1:length(ss.u)
     x[i] = ss.u[i][iS];
 end
-plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),lw=3)
+plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," mM"),lw=3)
 
     xlabel!("Minutes")
     ylabel!(string(mm.odeFB.syms[iS]," molecules"))
