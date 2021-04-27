@@ -4,7 +4,7 @@ p = Dict([
     :cB  => 0.0350,    # Attachment rate of single BiP molecule to unfolded proteins [(1/mol)(1/s)]
     :cBI => 0.0,       # Mutant Ire1 bipless - Attachment rate of single BiP molecule to Ire1 [(1/mol)(1/s)]
     :gUB => 196.0,     # Dissociation rate of BiP from folding complex [1/s]
-    :cD  => 9.75,      # Enzymatic rate of disulfide bond breaking [0.0015 (1/mol)(1/s)] x DTT concentration [0 - 6500 mol = 0-5 mM]: [0 - 9.75 (1/s)]
+    :cD  => 9710.475,  # Enzymatic rate of disulfide bond breaking [0.0015 (1/mol)(1/s)] x DTT concentration [0 - 6473650 mol = 0-5 mM]: [0 - 9710.475 (1/s)]
     :cE  => 0.0015,    # Enzymatic rate of disulfide bond formation [(1/mol)(1/s)]
     :gB  => 0.000139,  # Decay rate of BiP [1/s]
     :gF  => 0.000833,  # Folding rate of protein in the folding complex [1/s]

@@ -6,7 +6,7 @@ using Plots
 
 cd("C:\\Users\\mgsch\\Dropbox (MGS-UCSF)\\MODEL - Quantifying feedback\\Paper\\CoRa\\")
 iARG = (mm = "UPRv5",  # Label for motif file
-     ex = "Ex01",      # Label for parameters file
+     ex = "mutI",      # Label for parameters file
      pp = :cD,         # Label for perturbation type
      ax = :cD,         # Label for condition/environment
      an = "ExSSs");    # Chose analysis type (Options: ExSSs, ExDyn, DYms, OptDY)
@@ -22,14 +22,14 @@ pO = copy(p);
 p[:cD] = 0.0;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
 x0 = zeros(length(mm.odeFB.syms));
-x0[5] = 256;    # :I, I total = 256 mol
+x0[5] = 256;                # :I, I total = 256 mol
 x0[8] = p[:bHu]/p[:gHs];    # :Hu, basal Hac1 = 200 mol
-x0[11] = 430000;# :B, basal BiP = 430,000 mol
+x0[11] = 430000;            # :B, basal BiP = 430,000 mol
 ss = try
-        solve(ODEProblem(mm.odeFB,x0,1e6,pV),alg_hints=[:stiff]);
+        solve(ODEProblem(mm.odeFB,x0,1e6,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
     catch
         try
-            solve(ODEProblem(mm.odeFB,x0,1e6,pV));
+            solve(ODEProblem(mm.odeFB,x0,1e6,pV),isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
         catch
             println("WARNING: Error in steady state calculation.")
         end
@@ -45,10 +45,10 @@ iS = 15;
 p[:cD] = 0.0;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
 ss = try
-        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff]);
+        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
     catch
         try
-            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV));
+            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
         catch
             println("WARNING: Error in steady state calculation.")
         end
@@ -62,10 +62,10 @@ plot(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),l
 p[:cD] = 9710.475*0.66/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
 ss = try
-        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff]);
+        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
     catch
         try
-            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV));
+            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
         catch
             println("WARNING: Error in steady state calculation.")
         end
@@ -79,10 +79,10 @@ plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),
 p[:cD] = 9710.475*1/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
 ss = try
-        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff]);
+        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
     catch
         try
-            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV));
+            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
         catch
             println("WARNING: Error in steady state calculation.")
         end
@@ -96,10 +96,10 @@ plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),
 p[:cD] = 9710.475*1.5/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
 ss = try
-        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff]);
+        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
     catch
         try
-            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV));
+            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
         catch
             println("WARNING: Error in steady state calculation.")
         end
@@ -113,10 +113,10 @@ plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),
 p[:cD] = 9710.475*2.2/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
 ss = try
-        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff]);
+        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
     catch
         try
-            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV));
+            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
         catch
             println("WARNING: Error in steady state calculation.")
         end
@@ -130,10 +130,10 @@ plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),
 p[:cD] = 9710.475*3.3/5;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
 ss = try
-        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff]);
+        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
     catch
         try
-            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV));
+            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
         catch
             println("WARNING: Error in steady state calculation.")
         end
@@ -147,10 +147,10 @@ plot!(ss.t/60,x,label=string("DTT = ",round(100*p[:cD]*5.0/9710.475)/100," nM"),
 p[:cD] = 9710.475;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
 ss = try
-        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff]);
+        solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
     catch
         try
-            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV));
+            solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
         catch
             println("WARNING: Error in steady state calculation.")
         end
