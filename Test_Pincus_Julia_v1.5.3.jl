@@ -6,7 +6,7 @@ using Plots
 
 cd("C:\\Users\\mgsch\\Dropbox (MGS-UCSF)\\MODEL - Quantifying feedback\\Paper\\CoRa\\")
 iARG = (mm = "UPRv5",  # Label for motif file
-     ex = "Ex01",      # Label for parameters file
+     ex = "mutH",      # Label for parameters file
      pp = :cD,         # Label for perturbation type
      ax = :cD,         # Label for condition/environment
      an = "ExSSs");    # Chose analysis type (Options: ExSSs, ExDyn, DYms, OptDY)
@@ -43,9 +43,11 @@ iS = 15;
 
 # Simulate and plot different perturbation values:
 DTT = [0,0.6600,0.9900,1.4800,2.2200,3.5500,5.0000];    # DTT concentration
+t = collect(0.0:30.0:240.0).*60.0;                      # TEMPORAL variable
+X = zeros(length(DTT),length(t));                       # TEMPORAL variable
 ### :cD - Enzymatic rate of disulfide bond breaking x DTT number of molecules in the ER
-for d in DTT
-    p[:cD] = p[:cD0] * (p[:mMc] * (d * p[:ERv]));
+for d in 1:length(DTT)
+    p[:cD] = p[:cD0] * (p[:mMc] * (DTT[d] * p[:ERv]));
     pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
     ss = try
             solve(ODEProblem(mm.odeFB,x0,240.0*60,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
@@ -56,16 +58,24 @@ for d in DTT
                 println("WARNING: Error in steady state calculation.")
             end
         end;
+    # TEMPORAL vvv #
+    for i in 1:length(t)
+       x = ss(t[i]);
+       X[d,i] = x[iS];
+    end;
+    # TEMPORAL ^^^ #
     x = zeros(length(ss.u));
     for i in 1:length(ss.u)
         x[i] = ss.u[i][iS];
     end
-    if d==0
-        plot(ss.t/60,x,label=string("DTT = ",d," mM"),lw=3,legend=:topleft)
+    if DTT[d]==0
+        plot(ss.t/60,x,label=string("DTT = ",DTT[d]," mM"),lw=3,legend=:topleft)
     else
-        plot!(ss.t/60,x,label=string("DTT = ",d," mM"),lw=3,legend=:topleft)
+        plot!(ss.t/60,x,label=string("DTT = ",DTT[d]," mM"),lw=3,legend=:topleft)
     end
 end
 
     xlabel!("Minutes")
     ylabel!(string(mm.odeFB.syms[iS]," molecules"))
+
+    X   # TEMPORAL variable
