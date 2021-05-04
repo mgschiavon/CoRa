@@ -22,9 +22,12 @@ pO = copy(p);
 p[:cD] = 0.0;
 pV = [p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps];
 x0 = zeros(length(mm.odeFB.syms));
-x0[5] = 256;                # :I, I total = 256 mol
-x0[8] = p[:bHu]/p[:gHs];    # :Hu, basal Hac1 = 200 mol
-x0[11] = 430000;            # :B, basal BiP = 430,000 mol
+x0[1] = 0;                  # :U, unfolded proteins
+x0[2] = 1000;               # :UB, unfolded proteins:BiP complex
+x0[5] = 256;                # :I, Ire1
+x0[8] = 190;                # :Hu, Hac1 unspliced mRNA
+x0[10] = 12.9287;           # :Bm, BiP mRNA
+x0[11] = 75000;             # :B, BiP
 ss = try
         solve(ODEProblem(mm.odeFB,x0,1e6,pV),alg_hints=[:stiff],isoutofdomain=(u,p,t) -> any(x -> (x < 0), u));
     catch
