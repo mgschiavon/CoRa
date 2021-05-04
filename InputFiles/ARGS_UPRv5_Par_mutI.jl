@@ -6,7 +6,6 @@ p = Dict([
     :gUB => 196.0,     # Dissociation rate of BiP from folding complex [1/s]
     :cD  => 9710.475,  # Enzymatic rate of disulfide bond breaking [0.0015 (1/mol)(1/s)] x DTT concentration [0 - 6473650 mol = 0-5 mM]: [0 - 9710.475 (1/s)]
     :cE  => 0.0015,    # Enzymatic rate of disulfide bond formation [(1/mol)(1/s)]
-    :gB  => 0.000139,  # Decay rate of BiP [1/s]
     :gF  => 0.000833,  # Folding rate of protein in the folding complex [1/s]
     :mI  => 0.0356,    # Ire1 synthesis rate to keep the population of Ire1 approximately 256 mol [mol/s]
     :gI  => 0.000139,  # Decay rate of Ire1 (assumed the same as BiP and Ero1) [1/s]
@@ -24,7 +23,7 @@ p = Dict([
     :a1  => 5.26,      # Part of BiP synthesis rate function
     :gBm => 0.000667,  # Decay rate of BiP mRNA (1/s)
     :bB  => 0.25,      # BiP synthesis rate [1/s]
-    :gB  => 0.000139,  # Decay rate of BiP (1/s)
+    :gB  => 0.000139,  # Decay rate of BiP [1/s]
     :bEm => 1.08,      # Ero1 mRNA basal synthesis rate [mol/s]
     :nE  => 7.0,       # Part of Ero1 synthesis rate function
     :gEm => 0.000667,  # Decay rate of Ero1 mRNA [1/s]
