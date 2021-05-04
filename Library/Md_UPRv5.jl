@@ -44,7 +44,7 @@ module mm
 		dEm  = (bEm * (1 + (nE * (Hs ^ 2)/(a0 + (a1 * Hs) + (Hs ^ 2))))) - (gEm * Em)
 		dE   = (bE * Em) - (gE * E)
 		dRm  = - (gHs * Rm) + (bHs * min(Ia,Hu))
-		dRs  = (0.00833 * Rm) - (0.0000347 * Rs)
+		dRs  = (0.008333333333333 * Rm) - (0.000034722 * Rs)
 	end sU cB cBI gUB cD cE gB gF mI gI cA gIB gIA kI nI bHu gHs bHs bBm nB a0 a1 gBm bB gB bEm nE gEm bE gE uT;
 
 	# Define system's output (total Y):
