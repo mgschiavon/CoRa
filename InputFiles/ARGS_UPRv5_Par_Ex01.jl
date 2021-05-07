@@ -20,6 +20,7 @@ p = Dict([
     :bHu => 0.1667,    # Transcription rate of Hac1 unspliced mRNA [mol/s]
     :gHs => 0.00083333,# Decay rate of Hac1 mRNA [1/s]
     :bHs => 0.0015,    # Splicing rate of Hac1 mRNA [1/s]
+    :bHo => 1.5152e-9, # Basal splicing rate of Hac1 mRNA [1/s]
     :bBm => 0.1625,    # BiP mRNA basal synthesis rate [mol/s]
     :nB  => 4.0,       # Part of BiP synthesis rate function
     :a0  => 296.5118,  # Part of BiP synthesis rate function
