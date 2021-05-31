@@ -10,8 +10,8 @@ p = Dict([
     :cD  => 3000,      # Enzymatic rate of disulfide bond breaking x DTT number of molecules in the ER: (DTT [mM])*(cD0*mMc*ERv); 3000 ~ 1.53mM DTT
     :cE  => 0.0015,    # Enzymatic rate of disulfide bond formation [(1/mol)(1/s)]
     :gF  => 0.00083333,# Folding rate of protein in the folding complex [1/s]
-    :mI  => 0,    # Ire1 synthesis rate to keep the population of Ire1 approximately 256 mol [mol/s]
-    :gI  => 0,  # Decay rate of Ire1 (assumed the same as BiP and Ero1) [1/s]
+    :mI  => 0.0356,    # Ire1 synthesis rate to keep the population of Ire1 approximately 256 mol [mol/s]
+    :gI  => 0.000139,  # Decay rate of Ire1 (assumed the same as BiP and Ero1) [1/s]
     :cA  => 0.00021777,# Attachment rate of Ire1 molecule to an unfolded protein [(1/mol)(1/s)]
     :gIB => 195.9896,  # Dissociation rate of BiP from the inactive complex [1/s]
     :gIA => 195.9896,  # Part of non-linear (active Ire1 cooperative) decay rate [1/s]
@@ -35,3 +35,12 @@ p = Dict([
     :gE  => 0.00013889,# Decay rate of Ero1 [1/s]
     :uT  => NaN,       # LOCAL: Constitutive I activation "boost" (to get the locally anologous system)
 ]);
+
+# Initial conditions
+x0 = zeros(length(mm.odeFB.syms));
+x0[1] = 0;                  # :U, unfolded proteins
+x0[2] = 1000;               # :UB, unfolded proteins:BiP complex
+x0[5] = 256;                # :I, Ire1
+x0[8] = 190;                # :Hu, Hac1 unspliced mRNA
+x0[10] = 12.9287;           # :Bm, BiP mRNA
+x0[11] = 75000;             # :B, BiP
