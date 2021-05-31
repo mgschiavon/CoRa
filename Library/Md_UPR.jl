@@ -25,8 +25,8 @@ module mm
 		dB   = (bB * Bm) - (gB * B) - (cB * U * B) + (gUB * UB) - (cB * Ud * B) + (gUB * UdB) + (gF * UB) - (cBI * B * I) + (gIB * IB) + (gI * IB)
 		dEm  = (bEm * (1 + (nE * (Hs ^ 2)/(a0 + (a1 * Hs) + (Hs ^ 2))))) - (gEm * Em)
 		dE   = (bE * Em) - (gE * E)
-		dRm  = - (gHs * Rm) + ((bHo * min(I,Hu)) + (bHs * min(Ia,Hu)))
-		dRs  = (0.008333333333333 * Rm) - (0.00003472222222222222 * Rs)
+		#dRm  = - (gHs * Rm) + ((bHo * min(I,Hu)) + (bHs * min(Ia,Hu)))
+		#dRs  = (0.008333333333333 * Rm) - (0.00003472222222222222 * Rs)
 	end sU cB cBI gUB cD cE gB gF mI gI cA gIB gIA kI nI bHu gHs bHs bHo bBm nB a0 a1 gBm bB gB bEm nE gEm bE gE uT;
 	# ODE system without feedback
 	odeNF = @ode_def begin
@@ -43,8 +43,8 @@ module mm
 		dB   = (bB * Bm) - (gB * B) - (cB * U * B) + (gUB * UB) - (cB * Ud * B) + (gUB * UdB) + (gF * UB) - (cBI * B * I) + (gIB * IB) + (gI * IB)
 		dEm  = (bEm * (1 + (nE * (Hs ^ 2)/(a0 + (a1 * Hs) + (Hs ^ 2))))) - (gEm * Em)
 		dE   = (bE * Em) - (gE * E)
-		dRm  = - (gHs * Rm) + ((bHo * min(I,Hu)) + (bHs * min(Ia,Hu)))
-		dRs  = (0.008333333333333 * Rm) - (0.00003472222222222222 * Rs)
+		#dRm  = - (gHs * Rm) + ((bHo * min(I,Hu)) + (bHs * min(Ia,Hu)))
+		#dRs  = (0.008333333333333 * Rm) - (0.00003472222222222222 * Rs)
 	end sU cB cBI gUB cD cE gB gF mI gI cA gIB gIA kI nI bHu gHs bHs bHo bBm nB a0 a1 gBm bB gB bEm nE gEm bE gE uT;
 
 	# Define system's output (total Y):
