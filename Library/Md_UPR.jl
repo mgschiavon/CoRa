@@ -1,4 +1,4 @@
-# Unfolded protein response (v05)
+# Unfolded protein response
 #   with explicit B & E mRNA dynamics + reporter
 #   intracellular signaling pathway
 #   as modeled in Pincus et al. (2010)
