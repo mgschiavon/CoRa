@@ -4,6 +4,7 @@
 module fn
 	# Required libraries
 	using DifferentialEquations
+	using ParameterizedFunctions
 	using Statistics
 
 	# Steady state function for a given system
@@ -11,20 +12,20 @@ module fn
 	#        p    - Dictionary function with the ODE parameters & values
 	#        x0   - Vector of initial state of the ODE system
 	#        rtol - Tolerance value for ODE solver
-	# OUPUT: ss   - Vector of steady state of the ODE system
+	# OUTPUT: ss   - Vector of steady state of the ODE system
 	function SS(syst, p, x0, rtol)
 		pV = [p[eval(Meta.parse(string(":",i)))] for i in syst.sys.ps];
 		ss = try
-		        solve(ODEProblem(mm.odeFB,x0,1e3,pV); reltol=rtol);
-				return ss.u[end]
-		    catch
-		        try
-		            solve(ODEProblem(mm.odeFB,x0,1e3,pV),alg_hints=[:stiff]; reltol=rtol);
-					return ss.u[end]
-		        catch
-		            println("WARNING: Error in ODE simulation.")
-		        end
-		    end;
+			solve(ODEProblem(syst,x0,1e3,pV); reltol=rtol);
+		catch
+			try
+				solve(ODEProblem(syst,x0,1e3,pV),alg_hints=[:stiff]; reltol=rtol);
+			catch
+				println("WARNING: Error in ODE simulation.")
+				return NaN
+			end
+		end;
+		return ss.u[end]
 	end;
 
 	# ODE dynamics for a given system

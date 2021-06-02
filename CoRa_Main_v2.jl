@@ -9,16 +9,15 @@
 #			Distributions
 #			DelimitedFiles
 
+## Load functions & parameters:
+using DelimitedFiles
+using Distributions
+mm = include(string("Library\\Md_",iARG.mm,".jl"));
+fn = include(string("Library\\FN_DYs_v2.jl"));
 ## INPUTS:
 # iARG = (mm : Label for motif file, ex : Label for parameters file, pp : Label for perturbation type, an : Chose analysis type);
 include(string("InputFiles\\ARGS_",iARG.mm,"_Pert_",iARG.ex,".jl"))	# Perturbation details
 include(string("InputFiles\\ARGS_",iARG.mm,"_Par_",iARG.ex,".jl"))	# Core parameters
-
-# Load functions & parameters:
-using DelimitedFiles
-using Distributions
-mm = include(string("Library\\Md_",iARG.mm,".jl"));
-fn = include(string("Library\\FN_DYs.jl"));
 pO = copy(p);
 
 ## Run analysis
@@ -29,15 +28,15 @@ if(iARG.an=="ExSSs")
 		writedlm(io, [vcat(iARG.ax,[string("FbR_",i) for i in mm.odeFB.syms],[string("FbD_",i) for i in mm.odeFB.syms],[string("NfR_",i) for i in mm.odeNF.syms],[string("NfD_",i) for i in mm.odeNF.syms],string("CoRa(",iARG.pp,")"))],'\t');
 		r = 10 .^ collect(pert.r[1]:pert.s:pert.r[2]);
         for i in 1:length(r)
+			p[pert.c] *= r[i];
+            ssR = x0;
+            soR = x0;
 			rtol = 1e-12;
-			uns = 0;
-            p[pert.c] *= r[i];
-            flg1 = 1;
-            ssR = ones(length(mm.odeFB.syms));
-            soR = ones(length(mm.odeNF.syms));
-            while(rtol >= 1e-24)
+			tT  = 0;
+            while(tT <= 1e12)
+				tT += 1e3;
                 # Reference steady state:
-                ssR = fn.SS(mm.odeFB, p, ssR, rtol, uns);
+                ssR = fn.SS(mm.odeFB, p, ssR, rtol);
                 # Locally analogous system reference steady state:
                 mm.localNF(p,ssR);
                 soR = fn.SS(mm.odeNF, p, soR, rtol, uns);
