@@ -29,17 +29,16 @@ if(iARG.an=="ExSSs")
 		r = 10 .^ collect(pert.r[1]:pert.s:pert.r[2]);
         for i in 1:length(r)
 			p[pert.c] *= r[i];
-            ssR = x0;
-            soR = x0;
-			rtol = 1e-12;
-			tT  = 0;
-            while(tT <= 1e12)
-				tT += 1e3;
-                # Reference steady state:
-                ssR = fn.SS(mm.odeFB, p, ssR, rtol);
-                # Locally analogous system reference steady state:
-                mm.localNF(p,ssR);
-                soR = fn.SS(mm.odeNF, p, soR, rtol, uns);
+            rtol = 1e-12;
+			# Reference steady state:
+			ssR = fn.SS(mm.odeFB, p, x0, rtol);
+			# Locally analogous system reference steady state:
+			mm.localNF(p,ssR);
+			soR = fn.SS(mm.odeNF, p, x0, rtol);
+
+
+
+			
                 if(abs(mm.outFB(ssR) - mm.outNF(soR)) > 1e-4)
                     rtol *= 1e-3;
                     if(rtol < 1e-24)

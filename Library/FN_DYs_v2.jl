@@ -15,17 +15,29 @@ module fn
 	# OUTPUT: ss   - Vector of steady state of the ODE system
 	function SS(syst, p, x0, rtol)
 		pV = [p[eval(Meta.parse(string(":",i)))] for i in syst.sys.ps];
-		ss = try
-			solve(ODEProblem(syst,x0,1e3,pV); reltol=rtol);
-		catch
-			try
-				solve(ODEProblem(syst,x0,1e3,pV),alg_hints=[:stiff]; reltol=rtol);
+		tS = 0;
+		dXrm = 1;
+		while(dXrm > 1e-6)
+			ss = try
+				solve(ODEProblem(syst,x0,1e3,pV); reltol=rtol,save_everystep = false);
 			catch
-				println("WARNING: Error in ODE simulation.")
-				return NaN
+				try
+					solve(ODEProblem(syst,x0,1e3,pV),alg_hints=[:stiff]; reltol=rtol,save_everystep = false);
+				catch err
+					println("WARNING: Error in ODE simulation: <<",err,">>. ss --> NaN")
+					x0 = NaN
+					break
+				end
+			end;
+			dXrm = maximum(abs.(big.(ss(1e3))-big.(ss(1e3-0.01)))./big.(ss(1e3)));
+			x0 = ss(1e3);
+			tS += 1e3;
+			if(tS>=1e6)
+				println("WARNING: Maximum iteration reached (simulated time 1e18). Max relative Delta: ",dXrm)
+				break
 			end
-		end;
-		return ss.u[end]
+		end
+		return x0
 	end;
 
 	# ODE dynamics for a given system
