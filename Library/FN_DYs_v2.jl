@@ -25,7 +25,7 @@ module fn
 					solve(ODEProblem(syst,x0,1e6,pV),alg_hints=[:stiff]; reltol=rtol,save_everystep = false);
 				catch err
 					println("WARNING: Error in ODE simulation: <<",err,">>. ss --> NaN")
-					x0 = NaN
+					x0 = zeros(length(syst.syms)).+NaN;
 					break
 				end
 			end;

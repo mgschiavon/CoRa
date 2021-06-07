@@ -30,29 +30,42 @@ if(iARG.an=="ExSSs")
         for i in 1:length(r)
 			p[pert.c] *= r[i];
             rtol = 1e-12;
-            ssR = zeros(length(mm.odeFB.syms));
-            soR = zeros(length(mm.odeNF.syms));
+			ssR = zeros(length(mm.odeFB.syms)).+NaN;
+            soR = zeros(length(mm.odeNF.syms)).+NaN;
 			while(rtol >= 1e-24)
 				# Reference steady state:
 				ssR = fn.SS(mm.odeFB, p, x0, rtol);
+				if(any(isnan.(ssR)))
+					ssR = zeros(length(mm.odeFB.syms)).+NaN;
+					soR = zeros(length(mm.odeNF.syms)).+NaN;
+					println("Condition excluded! ssR --> NaN");
+					break;
+				end
 				# Locally analogous system reference steady state:
 				mm.localNF(p,ssR);
 				soR = fn.SS(mm.odeNF, p, ssR, rtol);
+				if(any(isnan.(soR)))
+					ssR = zeros(length(mm.odeFB.syms)).+NaN;
+					soR = zeros(length(mm.odeNF.syms)).+NaN;
+					println("Condition excluded! soR --> NaN");
+					break;
+				end
 				if(abs(mm.outFB(ssR) - mm.outNF(soR)) > 1e-4)
                     rtol *= 1e-3;
                     if(rtol < 1e-24)
                         println("ERROR: Check NF system (reltol=",rtol,").")
                         println(vcat(pert.p,i,[p[eval(Meta.parse(string(":",i)))] for i in syst.sys.ps],mm.outFB(ssR),mm.outNF(soR)))
                         if(abs(mm.outFB(ssR) - mm.outNF(soR))/mm.outFB(ssR) > 0.01)
-                            flg1 = 0;
-                            println("SS results excluded!")
+							ssR = zeros(length(mm.odeFB.syms)).+NaN;
+							soR = zeros(length(mm.odeNF.syms)).+NaN;
+							println("Error too large. SS results excluded!")
                         end
                     end
 				else
                     break
                 end
             end
-            # Perturbation:
+			# Perturbation:
             p[pert.p] *= pert.d;
             ssD = fn.SS(mm.odeFB, p, ssR, rtol);
             soD = fn.SS(mm.odeNF, p, soR, rtol);
