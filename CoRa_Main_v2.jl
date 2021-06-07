@@ -30,34 +30,32 @@ if(iARG.an=="ExSSs")
         for i in 1:length(r)
 			p[pert.c] *= r[i];
             rtol = 1e-12;
-			# Reference steady state:
-			ssR = fn.SS(mm.odeFB, p, x0, rtol);
-			# Locally analogous system reference steady state:
-			mm.localNF(p,ssR);
-			soR = fn.SS(mm.odeNF, p, x0, rtol);
-
-
-
-			
-                if(abs(mm.outFB(ssR) - mm.outNF(soR)) > 1e-4)
+            ssR = zeros(length(mm.odeFB.syms));
+            soR = zeros(length(mm.odeNF.syms));
+			while(rtol >= 1e-24)
+				# Reference steady state:
+				ssR = fn.SS(mm.odeFB, p, x0, rtol);
+				# Locally analogous system reference steady state:
+				mm.localNF(p,ssR);
+				soR = fn.SS(mm.odeNF, p, ssR, rtol);
+				if(abs(mm.outFB(ssR) - mm.outNF(soR)) > 1e-4)
                     rtol *= 1e-3;
                     if(rtol < 1e-24)
-                        println("ERROR: Check NF system (reltol=",rtol*1e3,").")
-                        println(vcat(pert.p,i,[p[i] for i in mm.odeFB.params],mm.outFB(ssR),mm.outNF(soR)))
-                        #throw(DomainError("x-("))
+                        println("ERROR: Check NF system (reltol=",rtol,").")
+                        println(vcat(pert.p,i,[p[eval(Meta.parse(string(":",i)))] for i in syst.sys.ps],mm.outFB(ssR),mm.outNF(soR)))
                         if(abs(mm.outFB(ssR) - mm.outNF(soR))/mm.outFB(ssR) > 0.01)
                             flg1 = 0;
                             println("SS results excluded!")
                         end
                     end
-                else
+				else
                     break
                 end
             end
             # Perturbation:
             p[pert.p] *= pert.d;
-            ssD = fn.SS(mm.odeFB, p, ssR, rtol, uns);
-            soD = fn.SS(mm.odeNF, p, soR, rtol, uns);
+            ssD = fn.SS(mm.odeFB, p, ssR, rtol);
+            soD = fn.SS(mm.odeNF, p, soR, rtol);
             DYs = fn.DY(mm.outFB(ssR), mm.outFB(ssD), mm.outNF(soR), mm.outNF(soD));
             p[pert.p] /= pert.d;
             writedlm(io, [vcat(p[pert.c],ssR,ssD,soR,soD,DYs)],'\t');

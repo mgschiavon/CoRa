@@ -17,7 +17,7 @@ module fn
 		pV = [p[eval(Meta.parse(string(":",i)))] for i in syst.sys.ps];
 		tS = 0;
 		dXrm = 1;
-		while(dXrm > 1e-12)
+		while(dXrm > rtol)
 			ss = try
 				solve(ODEProblem(syst,x0,1e6,pV); reltol=rtol,save_everystep = false);
 			catch
