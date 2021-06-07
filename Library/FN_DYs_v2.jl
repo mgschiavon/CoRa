@@ -57,7 +57,6 @@ module fn
 			catch err
 				println("WARNING: Error in ODE simulation: <<",err,">>. ss --> NaN")
 				zeros(length(syst.syms)).+NaN;
-				break
 			end
 		end;
 		return xD
