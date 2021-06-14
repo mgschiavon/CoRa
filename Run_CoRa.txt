@@ -1,8 +1,8 @@
 ## Running in julia terminal
 	cd("C:\\Users\\mgsch\\Dropbox (MGS-UCSF)\\MODEL - Quantifying feedback\\Paper\\CoRa\\")
 	iARG = (mm = "UPR",  # Label for motif file
-       ex = "Ex01",      # Label for parameters file
+       ex = "Ex01d8",      # Label for parameters file
        pp = :cD,         # Label for perturbation type
        ax = :cD,         # Label for condition/environment
-       an = "ExSSs");    # Chose analysis type (Options: ExSSs, ExDyn, DYms, OptDY)
+       an = "ExDyn");    # Chose analysis type (Options: ExSSs, ExDyn, DYms, OptDY)
 	include("CoRa_Main_v2.jl")
