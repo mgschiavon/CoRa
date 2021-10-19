@@ -1,6 +1,6 @@
 ## CoRa ANALYSIS
 #	Mariana Gómez-Schiavon
-#	June, 2021
+#	October, 2021
 #		Julia v.1.5.3
 #		Required libraries:
 #			DifferentialEquations
@@ -13,7 +13,7 @@
 using DelimitedFiles
 using Distributions
 mm = include(string("Library\\Md_",iARG.mm,".jl"));
-fn = include(string("Library\\FN_DYs_v2.jl"));
+fn = include(string("Library\\FN_DYs_Julia_v_1_5_3.jl"));
 ## INPUTS:
 # iARG = (mm : Label for motif file, ex : Label for parameters file, pp : Label for perturbation type, an : Chose analysis type);
 include(string("InputFiles\\ARGS_",iARG.mm,"_Pert_",iARG.ex,".jl"))	# Perturbation details
