@@ -13,3 +13,6 @@ p = Dict([
     :mYs => NaN,       # LOCAL: Ys constitutive synthesis rate (e.g. [0.005,0.02] nM/min)
     :gYs => NaN,       # LOCAL: Ys constitutive degradation rate (e.g. [0.0301,0.0408] 1/min, with degODC)
 ]);
+
+# Initial conditions
+x0 = zeros(length(mm.odeFB.syms));
