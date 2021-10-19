@@ -4,4 +4,4 @@ pert = (p   = iARG.pp,	# Parameter to be perturbed
 		c   = iARG.ax,	# Condition parameter
 		r   = [-3,3],	# Range of conditions
 		s   = 0.01,		# Step
-		eps = 0.1);		# DY threshold
+		eps = 0.1);		# CoRa threshold ( optimization criteria)
