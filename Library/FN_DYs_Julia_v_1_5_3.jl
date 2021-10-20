@@ -36,6 +36,11 @@ module fn
 				println("WARNING: Maximum iteration reached (simulated time 1e18). Max relative Delta: ",dXrm)
 				break
 			end
+			if(any(x0.<0))
+				println("WARNING: Error in ODE simulation: Negative values. ss --> NaN")
+				x0 = zeros(length(syst.syms)).+NaN;
+				break
+			end
 		end
 		return x0
 	end;
