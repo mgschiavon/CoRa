@@ -15,4 +15,5 @@ p = Dict([
 ]);
 
 # Initial conditions
-x0 = zeros(length(mm.odeFB.syms));
+x0FB = ones(length(mm.odeFB.syms));     # Feedback system initial conditions
+x0NF = ones(length(mm.odeNF.syms));     # No-feedback system initial conditions
