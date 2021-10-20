@@ -34,7 +34,7 @@ if(iARG.an=="ExSSs")
             soR = zeros(length(mm.odeNF.syms)).+NaN;
 			while(rtol >= 1e-24)
 				# Reference steady state:
-				ssR = fn.SS(mm.odeFB, p, x0, rtol);
+				ssR = fn.SS(mm.odeFB, p, x0FB, rtol);
 				if(any(isnan.(ssR)))
 					ssR = zeros(length(mm.odeFB.syms)).+NaN;
 					soR = zeros(length(mm.odeNF.syms)).+NaN;
@@ -43,7 +43,7 @@ if(iARG.an=="ExSSs")
 				end
 				# Locally analogous system reference steady state:
 				mm.localNF(p,ssR);
-				soR = fn.SS(mm.odeNF, p, ssR, rtol);
+				soR = fn.SS(mm.odeNF, p, x0NF, rtol);
 				if(any(isnan.(soR)))
 					ssR = zeros(length(mm.odeFB.syms)).+NaN;
 					soR = zeros(length(mm.odeNF.syms)).+NaN;
@@ -85,7 +85,7 @@ elseif(iARG.an=="ExDyn")
 		soR = zeros(length(mm.odeNF.syms)).+NaN;
 		while(rtol >= 1e-24)
 			# Reference steady state:
-			ssR = fn.SS(mm.odeFB, p, x0, rtol);
+			ssR = fn.SS(mm.odeFB, p, x0FB, rtol);
 			if(any(isnan.(ssR)))
 				ssR = zeros(length(mm.odeFB.syms)).+NaN;
 				soR = zeros(length(mm.odeNF.syms)).+NaN;
@@ -94,7 +94,7 @@ elseif(iARG.an=="ExDyn")
 			end
 			# Locally analogous system reference steady state:
 			mm.localNF(p,ssR);
-			soR = fn.SS(mm.odeNF, p, ssR, rtol);
+			soR = fn.SS(mm.odeNF, p, x0NF, rtol);
 			if(any(isnan.(soR)))
 				ssR = zeros(length(mm.odeFB.syms)).+NaN;
 				soR = zeros(length(mm.odeNF.syms)).+NaN;
