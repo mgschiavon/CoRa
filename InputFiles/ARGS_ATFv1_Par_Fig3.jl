@@ -1,7 +1,7 @@
 # Kinetic parameters
 p = Dict([
     :g   => 0.01,      # Dilution rate (e.g. [0.01,0.24] 1/min)
-    :mY  => 0.125,     # Y synthesis rate dependent of W (nM/min)
+    :mY  => 1,     # Y synthesis rate dependent of W (nM/min)
     :gY  => 0.1,       # Y degradation rate (e.g. [0.0301,0.0408] 1/min, with degODC)
     :mU  => 0.125,     # U synthesis rate dependent of Y (nM/min)
     :gU  => 0.0001,    # U degradation rate (e.g. [0.0301,0.0408] 1/min, with degODC)
