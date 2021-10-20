@@ -54,7 +54,7 @@ if(iARG.an=="ExSSs")
                     rtol *= 1e-3;
                     if(rtol < 1e-24)
                         println("ERROR: Check NF system (reltol=",rtol,").")
-                        println(vcat(pert.p,i,[p[eval(Meta.parse(string(":",i)))] for i in mm.outFB.sys.ps],mm.outFB(ssR),mm.outNF(soR)))
+                        println(vcat(pert.p,i,[p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps],mm.outFB(ssR),mm.outNF(soR)))
                         if(abs(mm.outFB(ssR) - mm.outNF(soR))/mm.outFB(ssR) > 0.01)
 							ssR = zeros(length(mm.odeFB.syms)).+NaN;
 							soR = zeros(length(mm.odeNF.syms)).+NaN;
