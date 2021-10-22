@@ -6,7 +6,7 @@
 
 clear;
 sim.mm = 'ATFv1';       % Label for motif file
-sim.ex = 'Fig3';        % Label for parameters file
+sim.ex = 'Ex01';        % Label for parameters file
 sim.pp = 'mY';          % Label for perturbation type
 sim.ax = 'mY';          % Label for condition/range
 sim.an = 'ExSSs';       % Chose analysis type (Options: ExSSs, DYms, OptDY)
