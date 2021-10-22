@@ -1,5 +1,6 @@
 ## Running in julia terminal
 	cd("C:\\Users\\mgsch\\Dropbox (MGS-UCSF)\\MODEL - Quantifying feedback\\Paper\\CoRa\\")
+	using Pkg; Pkg.activate(".");
 	iARG = (mm = "ATFv1",  # Label for motif file
        ex = "Fig3",      # Label for parameters file
        pp = :mY,         # Label for perturbation type
