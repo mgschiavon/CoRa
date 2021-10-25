@@ -9,7 +9,7 @@ sim.mm = 'ATFv1';       % Label for motif file
 sim.ex = 'Ex01';        % Label for parameters file
 sim.pp = 'mY';          % Label for perturbation type
 sim.ax = 'mY';          % Label for condition/range
-sim.an = 'ExSSs';       % Chose analysis type (Options: ExSSs, DYms, OptDY)
+sim.an = 'ExDyn';       % Chose analysis type (Options: ExSSs, ExDyn, DYms, OptDY)
 
 %% Load & parse data
 x = importdata(cat(2,'OUT_',sim.an,'_',sim.mm,'_',sim.ex,'_',sim.pp,'_',sim.ax,'.txt'),'\t',1);
@@ -24,6 +24,16 @@ if(strcmp(sim.an,'ExSSs'))
     rho.pert = x.textdata{end};
     DYs = x.data(:,end);
     clear Is Ie i x str
+elseif(strcmp(sim.an,'ExDyn'))
+    ll = x.textdata;
+    pF = x.data([x.data(:,1)==1],2);
+    tF = x.data([x.data(:,1)==1],3);
+    sF = x.data([x.data(:,1)==1],4:end);
+    pN = x.data([x.data(:,1)==0],2);
+    tN = x.data([x.data(:,1)==0],3);
+    sN = x.data([x.data(:,1)==0],4:end);
+    lN = x.textdata;
+    clear x
 elseif(strcmp(sim.an,'DYms'))
     for i = 1:size(x.data,2)
         str = x.textdata{i};
@@ -83,17 +93,40 @@ end
 save(cat(2,'DATA_',sim.an,'_',sim.mm,'_',sim.ex,'_',sim.pp,'_',sim.ax,'.mat'))
 
 %% FIGURE
-fig = figure();
-fig.Units = 'inches';
-fig.PaperPosition = [2 1 3 3];
-fig.Position = fig.PaperPosition;
+if(strcmp(sim.an,'ExSSs'))
+    fig = figure();
+    fig.Units = 'inches';
+    fig.PaperPosition = [2 1 3 3];
+    fig.Position = fig.PaperPosition;
 
-plot(rho.values,DYs,'DisplayName','CoRa(\mu_Y)',...
-    'LineWidth',3,'Color',[0 0 0])
-    xlabel('Y synthesis rate (\mu_Y)','FontSize',12)
-    xlim([0.001 1000])
-    ylabel('CoRa_{\mu_Y\in\Theta}(\mu_Y)','FontSize',12)
-    ylim([0 1])
-    set(gca,'XScale','log','XTick',10.^[-2:2:2],'FontSize',12)
-    box on
-    print(gcf,cat(2,'RAW_Fig3_ATFv1_',sim.an),'-dpng','-r300')
+    plot(rho.values,DYs,'DisplayName','CoRa(\mu_Y)',...
+        'LineWidth',3,'Color',[0 0 0])
+        xlabel('Y synthesis rate (\mu_Y)','FontSize',12)
+        xlim([0.001 1000])
+        ylabel('CoRa_{\mu_Y\in\Theta}(\mu_Y)','FontSize',12)
+        ylim([0 1])
+        set(gca,'XScale','log','XTick',10.^[-2:2:2],'FontSize',12)
+        box on    
+elseif(strcmp(sim.an,'ExDyn'))
+    fig = figure();
+    fig.Units = 'inches';
+    fig.PaperPosition = [2 1 3 1.5];
+    fig.Position = fig.PaperPosition;
+    hold on;
+        plot(tF,sF(:,1),'LineWidth',2,'Color',[1 0.6 0.78])
+        plot(tN,sN(:,1),'LineWidth',2,'LineStyle','--','Color',[0 0 0])
+        xlabel('Time (min)')
+        xlim(500+([-.1 1]*8000))
+        ylim((10.^[-(log10(1.05)/10) log10(1.05)+(log10(1.05)/10)])*sF(1,1))
+        ylabel('Output')
+        title(cat(2,'CoRa_{\mu_Y\in\Theta}(\mu_Y)=',...
+            num2str(log10(sF(end,1)/sF(1,1))/log10(sN(end,1)/sN(1,1)),2)))
+        set(gca,'YTick','','YMinorTick','Off')
+        set(gca,'YScale','log',...
+            'YTick',(10.^[0:(log10(1.05)/3):log10(1.05)])*sF(1,1),... 'YTickLabel',{cat(2,'logY|\mu_Y^{(',sim(i).No,')}'),'','','','',''},...        'YTickLabelRotation',80,...
+            'XTick',[500:8000:10000],'XTickLabel',[500:8000:10000]-500,...
+            'XGrid','on','YGrid','on')
+        box on
+end
+        print(gcf,cat(2,'RAW_',sim.an,'_',sim.mm,'_',sim.ex,'_',sim.pp,'_',sim.ax),'-dpng','-r300')
+%% END
