@@ -119,55 +119,43 @@ elseif(iARG.an=="ExDyn")
 		# Feedback system:
 		syst = mm.odeFB;
 		x = fn.Dyn(syst, p, ssR, 500.0, rtol);
-		try
-			if(any(isnan.(x)))
-				writedlm(io, [vcat(1,p[iARG.pp],0,x,"NaN")],'\t');
-			end
-		catch
-			for i in 1:length(x.t)
-				writedlm(io, [vcat(1,p[iARG.pp],x.t[i],x.u[i],"NaN")],'\t');
-			end
-			p[pert.p] *= pert.d;
-			x = fn.Dyn(syst, p, last(x.u), 95000.0, rtol);
-			try
-				if(any(isnan.(x)))
-					writedlm(io, [vcat(1,p[iARG.pp],500.0,x,"NaN")],'\t');
-				end
-			catch
-				for i in 1:length(x.t)
-					writedlm(io, [vcat(1,p[iARG.pp],x.t[i]+500.0,x.u[i],"NaN")],'\t');
-				end
-				ssD = fn.SS(syst, p, ssR, rtol);
-				writedlm(io, [vcat(1,p[iARG.pp],"Inf",ssD,"NaN")],'\t');
-				p[pert.p] /= pert.d;
-			end
+		if(any(isnan.(x)))
+			writedlm(io, [vcat(1,p[iARG.pp],0,x,"NaN")],'\t');
 		end
+		for i in 1:length(x.t)
+			writedlm(io, [vcat(1,p[iARG.pp],x.t[i],x.u[i],"NaN")],'\t');
+		end
+		p[pert.p] *= pert.d;
+		x = fn.Dyn(syst, p, last(x.u), 95000.0, rtol);
+		if(any(isnan.(x)))
+			writedlm(io, [vcat(1,p[iARG.pp],500.0,x,"NaN")],'\t');
+		end
+		for i in 1:length(x.t)
+			writedlm(io, [vcat(1,p[iARG.pp],x.t[i]+500.0,x.u[i],"NaN")],'\t');
+		end
+		ssD = fn.SS(syst, p, ssR, rtol);
+		writedlm(io, [vcat(1,p[iARG.pp],"Inf",ssD,"NaN")],'\t');
+		p[pert.p] /= pert.d;
 		# No-Feedback system:
 		syst = mm.odeNF;
 		x = fn.Dyn(syst, p, soR, 500.0, rtol);
-		try
-			if(any(isnan.(x)))
-				writedlm(io, [vcat(0,p[iARG.pp],0,x,"NaN")],'\t');
-			end
-		catch
-			for i in 1:length(x.t)
-				writedlm(io, [vcat(0,p[iARG.pp],x.t[i],x.u[i],"NaN")],'\t');
-			end
-			p[pert.p] *= pert.d;
-			x = fn.Dyn(syst, p, last(x.u), 95000.0, rtol);
-			try
-				if(any(isnan.(x)))
-					writedlm(io, [vcat(0,p[iARG.pp],500.0,x,"NaN")],'\t');
-				end
-			catch
-				for i in 1:length(x.t)
-					writedlm(io, [vcat(0,p[iARG.pp],x.t[i]+500.0,x.u[i],"NaN")],'\t');
-				end
-				ssD = fn.SS(syst, p, soR, rtol);
-				writedlm(io, [vcat(0,p[iARG.pp],"Inf",ssD,"NaN")],'\t');
-				p[pert.p] /= pert.d;
-			end
+		if(any(isnan.(x)))
+			writedlm(io, [vcat(0,p[iARG.pp],0,x,"NaN")],'\t');
 		end
+		for i in 1:length(x.t)
+			writedlm(io, [vcat(0,p[iARG.pp],x.t[i],x.u[i],"NaN")],'\t');
+		end
+		p[pert.p] *= pert.d;
+		x = fn.Dyn(syst, p, last(x.u), 95000.0, rtol);
+		if(any(isnan.(x)))
+			writedlm(io, [vcat(0,p[iARG.pp],500.0,x,"NaN")],'\t');
+		end
+		for i in 1:length(x.t)
+			writedlm(io, [vcat(0,p[iARG.pp],x.t[i]+500.0,x.u[i],"NaN")],'\t');
+		end
+		ssD = fn.SS(syst, p, soR, rtol);
+		writedlm(io, [vcat(0,p[iARG.pp],"Inf",ssD,"NaN")],'\t');
+		p[pert.p] /= pert.d;
 	end
 # Calculate CoRa curve for a range of parameters as another parameter varies:
 elseif(iARG.an=="DYms")
