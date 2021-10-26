@@ -42,42 +42,8 @@ elseif(iARG.an=="ExDyn")
 	p = copy(pO);
 	open(string("OUT_ExDyn_",iARG.mm,"_",iARG.ex,"_",iARG.pp,"_",iARG.ax,".txt"), "w") do io
 		writedlm(io, [vcat("FB","rho","time",[string(i) for i in mm.odeNF.syms])],'\t');
+		ssR, soR = fn.RefSS(mm,p,pert,x0FB,x0NF);
 		rtol = 1e-12;
-		ssR = zeros(length(mm.odeFB.syms)).+NaN;
-		soR = zeros(length(mm.odeNF.syms)).+NaN;
-		while(rtol >= 1e-24)
-			# Reference steady state:
-			ssR = fn.SS(mm.odeFB, p, x0FB, rtol);
-			if(any(isnan.(ssR)))
-				ssR = zeros(length(mm.odeFB.syms)).+NaN;
-				soR = zeros(length(mm.odeNF.syms)).+NaN;
-				println("Condition excluded! ssR --> NaN");
-				break;
-			end
-			# Locally analogous system reference steady state:
-			mm.localNF(p,ssR);
-			soR = fn.SS(mm.odeNF, p, x0NF, rtol);
-			if(any(isnan.(soR)))
-				ssR = zeros(length(mm.odeFB.syms)).+NaN;
-				soR = zeros(length(mm.odeNF.syms)).+NaN;
-				println("Condition excluded! soR --> NaN");
-				break;
-			end
-			if(abs(mm.outFB(ssR) - mm.outNF(soR)) > 1e-4)
-				rtol *= 1e-3;
-				if(rtol < 1e-24)
-					println("ERROR: Check NF system (reltol=",rtol,").")
-					println(vcat(pert.p,i,[p[eval(Meta.parse(string(":",i)))] for i in syst.sys.ps],mm.outFB(ssR),mm.outNF(soR)))
-					if(abs(mm.outFB(ssR) - mm.outNF(soR))/mm.outFB(ssR) > 0.01)
-						ssR = zeros(length(mm.odeFB.syms)).+NaN;
-						soR = zeros(length(mm.odeNF.syms)).+NaN;
-						println("Error too large. SS results excluded!")
-					end
-				end
-			else
-				break
-			end
-		end
 		# Feedback system:
 		syst = mm.odeFB;
 		x = fn.Dyn(syst, p, ssR, 500.0, rtol);
@@ -102,21 +68,21 @@ elseif(iARG.an=="ExDyn")
 		syst = mm.odeNF;
 		x = fn.Dyn(syst, p, soR, 500.0, rtol);
 		if(any(isnan.(x)))
-			writedlm(io, [vcat(0,p[iARG.pp],0,x,"NaN")],'\t');
+			writedlm(io, [vcat(0,p[iARG.pp],0,x)],'\t');
 		end
 		for i in 1:length(x.t)
-			writedlm(io, [vcat(0,p[iARG.pp],x.t[i],x.u[i],"NaN")],'\t');
+			writedlm(io, [vcat(0,p[iARG.pp],x.t[i],x.u[i])],'\t');
 		end
 		p[pert.p] *= pert.d;
 		x = fn.Dyn(syst, p, last(x.u), 95000.0, rtol);
 		if(any(isnan.(x)))
-			writedlm(io, [vcat(0,p[iARG.pp],500.0,x,"NaN")],'\t');
+			writedlm(io, [vcat(0,p[iARG.pp],500.0,x)],'\t');
 		end
 		for i in 1:length(x.t)
-			writedlm(io, [vcat(0,p[iARG.pp],x.t[i]+500.0,x.u[i],"NaN")],'\t');
+			writedlm(io, [vcat(0,p[iARG.pp],x.t[i]+500.0,x.u[i])],'\t');
 		end
-		ssD = fn.SS(syst, p, soR, rtol);
-		writedlm(io, [vcat(0,p[iARG.pp],"Inf",ssD,"NaN")],'\t');
+		soD = fn.SS(syst, p, soR, rtol);
+		writedlm(io, [vcat(0,p[iARG.pp],"Inf",soD)],'\t');
 		p[pert.p] /= pert.d;
 	end
 # Calculate CoRa curve for a range of parameters as another parameter varies:
