@@ -45,6 +45,71 @@ module fn
 		return x0
 	end;
 
+	# Get (pre-perturbation) reference steady-states:
+	# INPUT: mm   - Handle for the full ODE model (with mm.odeFB and mm.odeNF)
+	#        p    - Dictionary function with the ODE parameters & values
+	#        pert - Dictionary function with perturbation instructions
+	#        x0FB - Vector of initial state of the ODE feedback system
+	#        x0NF - Vector of initial state of the ODE no-feedback system
+	# OUTPUT: ssR - Vector of steady state of the ODE system feedback system
+	#         soR - Vector of steady state of the ODE system no-feedback system
+	function RefSS(mm,p,pert,x0FB,x0NF)
+		rtol = 1e-12;
+		ssR = zeros(length(mm.odeFB.syms)).+NaN;
+		soR = zeros(length(mm.odeNF.syms)).+NaN;
+		while(rtol >= 1e-24)
+			# Reference steady state:
+			ssR = fn.SS(mm.odeFB, p, x0FB, rtol);
+			if(any(isnan.(ssR)))
+				ssR = zeros(length(mm.odeFB.syms)).+NaN;
+				soR = zeros(length(mm.odeNF.syms)).+NaN;
+				println("Condition excluded! ssR --> NaN");
+				break;
+			end
+			# Locally analogous system reference steady state:
+			mm.localNF(p,ssR);
+			soR = fn.SS(mm.odeNF, p, x0NF, rtol);
+			if(any(isnan.(soR)))
+				ssR = zeros(length(mm.odeFB.syms)).+NaN;
+				soR = zeros(length(mm.odeNF.syms)).+NaN;
+				println("Condition excluded! soR --> NaN");
+				break;
+			end
+			if(abs(mm.outFB(ssR) - mm.outNF(soR)) > 1e-4)
+				rtol *= 1e-3;
+				if(rtol < 1e-24)
+					println("ERROR: Check NF system (reltol=",rtol,").")
+					println(vcat(pert.p,i,[p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps],mm.outFB(ssR),mm.outNF(soR)))
+					if(abs(mm.outFB(ssR) - mm.outNF(soR))/mm.outFB(ssR) > 0.01)
+						ssR = zeros(length(mm.odeFB.syms)).+NaN;
+						soR = zeros(length(mm.odeNF.syms)).+NaN;
+						println("Error too large. SS results excluded!")
+					end
+				end
+			else
+				break
+			end
+		end
+		return ssR, soR
+	end;
+
+	# Get (post-) perturbation steady-states:
+	# INPUT: mm   - Handle for the full ODE model (with mm.odeFB and mm.odeNF)
+	#        p    - Dictionary function with the ODE parameters & values
+	#        pert - Dictionary function with perturbation instructions
+	#        ssR  - Vector of pre-perturbation steady-state of the ODE feedback system
+	#        soR  - Vector of pre-perturbation steady-state of the ODE no-feedback system
+	# OUTPUT: ssD - Vector of steady state of the ODE system feedback system
+	#         soD - Vector of steady state of the ODE system no-feedback system
+	function PerSS(mm,p,pert,ssR,soR)
+		rtol = 1e-12;
+		p[pert.p] *= pert.d;
+		ssD = fn.SS(mm.odeFB, p, ssR, rtol);
+		soD = fn.SS(mm.odeNF, p, soR, rtol);
+		p[pert.p] /= pert.d;
+		return ssD, soD
+	end;
+
 	# ODE dynamics for a given system
 	# INPUT: syst - Handle for the ODE system (@ode_def)
 	#        p    - Dictionary function with the ODE parameters & values

@@ -29,50 +29,12 @@ if(iARG.an=="ExSSs")
 		r = 10 .^ collect(pert.r[1]:pert.s:pert.r[2]);
         for i in 1:length(r)
 			p[pert.c] *= r[i];
-            rtol = 1e-12;
-			ssR = zeros(length(mm.odeFB.syms)).+NaN;
-            soR = zeros(length(mm.odeNF.syms)).+NaN;
-			while(rtol >= 1e-24)
-				# Reference steady state:
-				ssR = fn.SS(mm.odeFB, p, x0FB, rtol);
-				if(any(isnan.(ssR)))
-					ssR = zeros(length(mm.odeFB.syms)).+NaN;
-					soR = zeros(length(mm.odeNF.syms)).+NaN;
-					println("Condition excluded! ssR --> NaN");
-					break;
-				end
-				# Locally analogous system reference steady state:
-				mm.localNF(p,ssR);
-				soR = fn.SS(mm.odeNF, p, x0NF, rtol);
-				if(any(isnan.(soR)))
-					ssR = zeros(length(mm.odeFB.syms)).+NaN;
-					soR = zeros(length(mm.odeNF.syms)).+NaN;
-					println("Condition excluded! soR --> NaN");
-					break;
-				end
-				if(abs(mm.outFB(ssR) - mm.outNF(soR)) > 1e-4)
-                    rtol *= 1e-3;
-                    if(rtol < 1e-24)
-                        println("ERROR: Check NF system (reltol=",rtol,").")
-                        println(vcat(pert.p,i,[p[eval(Meta.parse(string(":",i)))] for i in mm.odeFB.sys.ps],mm.outFB(ssR),mm.outNF(soR)))
-                        if(abs(mm.outFB(ssR) - mm.outNF(soR))/mm.outFB(ssR) > 0.01)
-							ssR = zeros(length(mm.odeFB.syms)).+NaN;
-							soR = zeros(length(mm.odeNF.syms)).+NaN;
-							println("Error too large. SS results excluded!")
-                        end
-                    end
-				else
-                    break
-                end
-            end
-			# Perturbation:
-            p[pert.p] *= pert.d;
-            ssD = fn.SS(mm.odeFB, p, ssR, rtol);
-            soD = fn.SS(mm.odeNF, p, soR, rtol);
-            DYs = fn.DY(mm.outFB(ssR), mm.outFB(ssD), mm.outNF(soR), mm.outNF(soD));
-            p[pert.p] /= pert.d;
-            writedlm(io, [vcat(p[pert.c],ssR,ssD,soR,soD,DYs)],'\t');
-            p[pert.c] /= r[i];
+			ssR, soR = fn.RefSS(mm,p,pert,x0FB,x0NF);
+			ssD, soD = fn.PerSS(mm,p,pert,ssR,soR);
+			DYs = fn.DY(mm.outFB(ssR), mm.outFB(ssD), mm.outNF(soR), mm.outNF(soD));
+			writedlm(io, [vcat(p[pert.c],ssR,ssD,soR,soD,DYs)],'\t');
+			p[pert.c] /= r[i];
+
         end
 	end
 # Calculate dynamic response after a perturbation:
