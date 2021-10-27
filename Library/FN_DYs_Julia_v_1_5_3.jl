@@ -13,7 +13,7 @@ module fn
 	#        x0   - Vector of initial state of the ODE system
 	#        rtol - Tolerance value for ODE solver
 	# OUTPUT: ss   - Vector of steady state of the ODE system
-	function SS(syst, p, x0, rtol)
+	function SS(syst,p,x0,rtol)
 		pV = [p[eval(Meta.parse(string(":",i)))] for i in syst.sys.ps];
 		tS = 0;
 		dXrm = 1;
@@ -117,7 +117,7 @@ module fn
 	#        tspan- Time to simulate
 	#        rtol - Tolerance value for ODE solver
 	# OUPUT: xD   - Vector of steady state of the ODE system
-	function Dyn(syst, p, x0, tspan, rtol)
+	function Dyn(syst,p,x0,tspan,rtol)
 		pV = [p[eval(Meta.parse(string(":",i)))] for i in syst.sys.ps];
 		xD = try
 			solve(ODEProblem(syst,x0,tspan,pV); reltol=rtol);
@@ -146,11 +146,13 @@ module fn
 	end;
 
 	# DY curve
-	# INPUT: p     - Dictionary function with the ODE parameters & values
-	#        pert  - Handle for the perturbation details
-	#        mm    - Handle for the considered motif
-	# OUPUT: DYs   - Vector of DY values for the range of parameters
-	function DYc(p, pert, mm,x0FB,x0NF)
+	# INPUT: p    - Dictionary function with the ODE parameters & values
+	#        pert - Handle for the perturbation details
+	#        mm   - Handle for the considered motif
+	#        x0FB - Vector of initial state of the ODE feedback system
+	#        x0NF - Vector of initial state of the ODE no-feedback system
+	# OUPUT: DYs  - Vector of DY values for the range of parameters
+	function DYc(p,pert,mm,x0FB,x0NF)
 		r = 10 .^ collect(pert.r[1]:pert.s:pert.r[2]);
 		DYs = Array{Float64}(undef,length(r)) .+ Inf;
 		for i in 1:length(r)
@@ -172,7 +174,7 @@ module fn
 	# INPUT: DYs   - Vector of DY values for the range of parameters
 	#        pert  - Handle for the perturbation details
 	# OUPUT:       - [Range of DY<=eps,start,end,min(DY),optimal rho]
-	function DYm(DYs, pert)
+	function DYm(DYs,pert)
 		r = 10 .^ collect(pert.r[1]:pert.s:pert.r[2]);
 		i = DYs .<= pert.eps;
 		j = findall(i);
@@ -191,7 +193,7 @@ module fn
 	#        DYs   - Vector of DY values for the range of parameters
 	#        uns  - 1 to use a slower, more stable ODE solver
 	# OUPUT:       - [Optimal rho, steady state for the full system before & after perturbation, and for the non-feedback system before & after perturbation]
-	function SSopt(p, pert, motif, DYs, uns)
+	function SSopt(p,pert,motif,DYs,uns)
 		r = 10 .^ collect(pert.r[1]:pert.s:pert.r[2]);
 		x = copy(DYs);
 		x[x .=== NaN] .= Inf;
