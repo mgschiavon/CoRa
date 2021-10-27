@@ -155,9 +155,14 @@ module fn
 		DYs = Array{Float64}(undef,length(r)) .+ Inf;
 		for i in 1:length(r)
 			p[pert.c] *= r[i];
-			ssR, soR = fn.RefSS(mm,p,pert,x0FB,x0NF);
-			ssD, soD = fn.PerSS(mm,p,pert,ssR,soR);
-			DYs[i] = fn.DY(mm.outFB(ssR), mm.outFB(ssD), mm.outNF(soR), mm.outNF(soD));
+			try
+				ssR, soR = fn.RefSS(mm,p,pert,x0FB,x0NF);
+				ssD, soD = fn.PerSS(mm,p,pert,ssR,soR);
+				DYs[i] = fn.DY(mm.outFB(ssR), mm.outFB(ssD), mm.outNF(soR), mm.outNF(soD));
+			catch err
+				println("WARNING: Error in ODE simulation: <<",err,">>. CoRa --> NaN")
+				DYs[i] = NaN;
+			end
 			p[pert.c] /= r[i];
 		end
 		return DYs
