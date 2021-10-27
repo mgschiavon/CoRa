@@ -148,50 +148,17 @@ module fn
 	# DY curve
 	# INPUT: p     - Dictionary function with the ODE parameters & values
 	#        pert  - Handle for the perturbation details
-	#        motif - Handle for the considered motif
-	#        uns  - 1 to use a slower, more stable ODE solver
+	#        mm    - Handle for the considered motif
 	# OUPUT: DYs   - Vector of DY values for the range of parameters
-	function DYc(p, pert, motif, uns)
+	function DYc(p, pert, mm,x0FB,x0NF)
 		r = 10 .^ collect(pert.r[1]:pert.s:pert.r[2]);
-		DYs = Array{Float64}(undef,length(r));
-		DYs /= 0;
-		p[pert.p] = pert.c;
+		DYs = Array{Float64}(undef,length(r)) .+ Inf;
 		for i in 1:length(r)
-			p[pert.p] *= r[i];
-			rtol = 1e-6;
-			flg1 = 1;
-			ssR = ones(length(motif.odeFB.syms));
-			soR = ones(length(motif.odeNF.syms));
-			while(rtol >= 1e-24)
-				# Reference steady state:
-				ssR = SS(motif.odeFB, p, ssR, rtol, uns);
-				# Locally analogous system reference steady state:
-				motif.localNF(p,ssR);
-				soR = SS(motif.odeNF, p, soR, rtol, uns);
-				if(abs(motif.outFB(ssR) - motif.outNF(soR)) > 1e-4)
-					rtol *= 1e-3;
-					if(rtol < 1e-24)
-						println("ERROR: Check NF system (reltol=",rtol*1e3,").")
-						println(vcat(pert.p,i,[p[i] for i in motif.odeFB.params],motif.outFB(ssR),motif.outNF(soR)))
-						#throw(DomainError("x-("))
-						if(abs(motif.outFB(ssR) - motif.outNF(soR))/motif.outFB(ssR) > 0.01)
-							flg1 = 0;
-							println("SS results excluded!")
-						end
-					end
-				else
-					break
-				end
-			end
-			# Perturbation:
-			p[pert.p] *= pert.d;
-			if(flg1==1)
-				ssD = SS(motif.odeFB, p, ssR, rtol, uns);
-				soD = SS(motif.odeNF, p, soR, rtol, uns);
-				DYs[i] = DY(motif.outFB(ssR), motif.outFB(ssD), motif.outNF(soR), motif.outNF(soD));
-			end
-			p[pert.p] /= pert.d;
-			p[pert.p] /= r[i];
+			p[pert.c] *= r[i];
+			ssR, soR = fn.RefSS(mm,p,pert,x0FB,x0NF);
+			ssD, soD = fn.PerSS(mm,p,pert,ssR,soR);
+			DYs[i] = fn.DY(mm.outFB(ssR), mm.outFB(ssD), mm.outNF(soR), mm.outNF(soD));
+			p[pert.c] /= r[i];
 		end
 		return DYs
 	end;

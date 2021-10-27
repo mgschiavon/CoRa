@@ -34,7 +34,6 @@ if(iARG.an=="ExSSs")
 			DYs = fn.DY(mm.outFB(ssR), mm.outFB(ssD), mm.outNF(soR), mm.outNF(soD));
 			writedlm(io, [vcat(p[pert.c],ssR,ssD,soR,soD,DYs)],'\t');
 			p[pert.c] /= r[i];
-
         end
 	end
 # Calculate dynamic response after a perturbation:
@@ -93,9 +92,8 @@ elseif(iARG.an=="DYms")
 		for pI = pN
 			for i = pI[2]
 				p = copy(pO);
-				uns = 0;
 				p[pI[1]] *= (10. ^i);
-				writedlm(io, [vcat([p[i[1]] for i in pN],fn.DYc(p,pert,mm,uns))],'\t')
+				writedlm(io, [vcat([p[i[1]] for i in pN],fn.DYc(p, pert, mm,x0FB,x0NF))],'\t')
 				p[pI[1]] /= (10. ^i);
 			end
 		end
