@@ -93,7 +93,12 @@ elseif(iARG.an=="DYms")
 			for i = pI[2]
 				p = copy(pO);
 				p[pI[1]] *= (10. ^i);
-				writedlm(io, [vcat([p[i[1]] for i in pN],fn.DYc(p, pert, mm,x0FB,x0NF))],'\t')
+				try
+					writedlm(io, [vcat([p[i[1]] for i in pN],fn.DYc(p, pert, mm,x0FB,x0NF))],'\t')
+				catch err
+					println("WARNING: Error in ODE simulation: <<",err,">>. CoRa --> NaN")
+					writedlm(io, [vcat([p[i[1]] for i in pN],collect(pert.r[1]:pert.s:pert.r[2]).+NaN)],'\t')
+				end
 				p[pI[1]] /= (10. ^i);
 			end
 		end
