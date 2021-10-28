@@ -108,7 +108,6 @@ elseif(iARG.an=="OptDY")
 		end
 		for ruN in 1:mrw.runs
 			println("RUN #",ruN)
-			uns = 0;
 			p = copy(pO);
 			####### Uncomment the next three lines for random initial conditions: #######
 			#for i in 1:length(mrw.pOp)
@@ -122,7 +121,7 @@ elseif(iARG.an=="OptDY")
 				mrwT = ones(mrw.iter); # NOTE: For MRW, make T=1.
 			end
 			## Initialize system
-			DY0 = fn.DYc(p,pert,mm,uns);    # Calculate DY curve
+			DY0 = fn.DYc(p, pert, mm,x0FB,x0NF);    # Calculate DY curve
 			DYm = fn.DYm(DY0, pert);    # Calculate metrics of DY curve
 			op0 = log10(DYm[3]/DYm[2]);   # Property to optimize (e.g. DY<=eps range length)
 			mi0 = DYm[4];                 # Secondary property to optimize (e.g. min(DY) value)
@@ -146,7 +145,7 @@ elseif(iARG.an=="OptDY")
 						p[mrw.pOp[pI]] = (10.0 ^ mrw.pMax[pI])
 					end
 				end
-				DYs = fn.DYc(p,pert,mm,uns);  # Calculate new DY curve
+				DYs = fn.DYc(p, pert, mm,x0FB,x0NF);  # Calculate new DY curve
 				DYm = fn.DYm(DYs, pert);  # Calculate new metrics of DY curve
 				op1 = log10(DYm[3]/DYm[2]); # New value of property to optimize (e.g. DY<=eps range length)
 				mi1 = DYm[4];               # New value of secondary property to optimize (e.g. min(DY) value)

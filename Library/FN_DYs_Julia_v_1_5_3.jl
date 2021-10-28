@@ -183,7 +183,7 @@ module fn
 		if isempty(j)
 			return [sum(DYs[i])./length(DYs[i]), NaN, NaN, minimum(x), r[argmin(x)]]
 		end
-		return [sum(DYs[i])./length(DYs[i]), pert.c * r[j[1]], pert.c * r[j[end]], minimum(x), r[argmin(x)]]
+		return [sum(DYs[i])./length(DYs[i]), r[j[1]], r[j[end]], minimum(x), r[argmin(x)]]
 	end;
 
 	# SSs for "optimal" control
